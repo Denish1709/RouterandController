@@ -29,43 +29,40 @@ let authors = [
 app.get("/books", (req, res) => {
   res.json(books);
 });
-
 app.get("/books/:id", (req, res) => {
   const book = books.find((p) => parseInt(p.id) === parseInt(req.params.id));
   if (book) {
-    res.status(200).json(book);
+    const author = authors.find((author) => author.id === book.authorId);
+    res.status(200).json({ ...book, name: author.name, bio: author.bio });
   } else {
-    res.status(400).json({ error: "Book is not available" });
+    res.status(400).json("ID provided is not available");
   }
 });
-
 app.get("/reviews", (req, res) => {
   res.json(reviews);
 });
-
-app.get("/reviews", (req, res) => {
+app.get("/reviews/:id", (req, res) => {
   const review = reviews.find(
     (p) => parseInt(p.id) === parseInt(req.params.id)
   );
   if (review) {
-    res.status(200).json(review);
+    const book = books.find((b) => b.id === review.bookId);
+    res.status(200).json({ ...review, book_title: book.title });
   } else {
-    res.status(400).json({ error: "Review is not available" });
+    res.status(400).json("ID provided is not available");
   }
 });
-
 app.get("/authors", (req, res) => {
   res.json(authors);
 });
-
-app.get("/authors", (req, res) => {
+app.get("/authors/:id", (req, res) => {
   const author = authors.find(
     (p) => parseInt(p.id) === parseInt(req.params.id)
   );
   if (author) {
     res.status(200).json(author);
   } else {
-    res.status(400).json({ error: "Author is not found" });
+    res.status(400).json("ID provided is not available");
   }
 });
 
